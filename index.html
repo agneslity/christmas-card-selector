@@ -143,48 +143,52 @@
     <div class="card-grid" id="cardGrid">
         <script>
             const cardGrid = document.getElementById('cardGrid');
-            const cardFileNames = [
-"images/xmas1.jpg",
-    //"images/xmas2.jpg",
-    "images/xmas3.jpg",
-//"images/xmas4.jpg",
-//"images/xmas5.jpg",
-//"images/xmas6.jpg",
-"images/xmas7.jpg",
-"images/xmas8.jpg",
-"images/xmas9.jpg",
-"images/xmas10.jpg",
-"images/xmas11.jpg",
-"images/xmas12.jpg",
-"images/xmas13.jpg",
-//"images/xmas14.jpg",
-"images/xmas15.jpg",
-"images/xmas16.jpg",
-"images/xmas17.jpg",
-"images/xmas18.jpg",
-"images/xmas19.jpg",
-"images/xmas20.jpg",
-"images/xmas21.jpg",
-"images/xmas22.jpg",
-"images/xmas23.jpg",
-"images/xmas24.jpg",
-"images/xmas25.jpg",
-"images/xmas26.jpg",
-"images/xmas27.jpg",
-"images/xmas28.jpg",
-"images/xmas29.jpg",
-"images/xmas30.jpg",
+            const cardFileNames = []
+const cardData = [
+{ fileName:"xmas1.jpg",designer:"1A Chloe Kong"},
+    //"xmas2.jpg",
+    "xmas3.jpg",
+//"xmas4.jpg",
+//"xmas5.jpg",
+//"xmas6.jpg",
+"xmas7.jpg",
+"xmas8.jpg",
+"xmas9.jpg",
+"xmas10.jpg",
+"xmas11.jpg",
+"xmas12.jpg",
+"xmas13.jpg",
+//"xmas14.jpg",
+"xmas15.jpg",
+"xmas16.jpg",
+"xmas17.jpg",
+"xmas18.jpg",
+"xmas19.jpg",
+"xmas20.jpg",
+"xmas21.jpg",
+"xmas22.jpg",
+"xmas23.jpg",
+"xmas24.jpg",
+"xmas25.jpg",
+"xmas26.jpg",
+"xmas27.jpg",
+"xmas28.jpg",
+"xmas29.jpg",
+"xmas30.jpg",
 
 ];
             
             
-            // Loop to generate cards using the single file path
-            cardFileNames.forEach((fileName, index) => {
-                // Note: The 'src' for the small image and the 'data-original-src' for the download are the same path.
-                const imagePath = fileName; 
+            // Loop to generate cards using the data array
+            cardData.forEach((data, index) => {
+                const imagePath = `images/${data.fileName}`; 
                 
                 const cardHtml = `
-                    <div class="card" data-original-src="${imagePath}" data-filename="Christmas_Card_${index + 1}.jpg">
+                    <div class="card" 
+                         data-original-src="${imagePath}" 
+                         data-filename="Christmas_Card_${index + 1}.jpg"
+                         title="Designed by: ${data.designer}"> 
+                        
                         <img src="${imagePath}" alt="Christmas Card ${index + 1}" class="card-image">
                     </div>
                 `;
