@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select a Christmas Card</title>
+    <style>
+        /* CSS for Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* --- Card Grid Layout --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            aspect-ratio: 1 / 1.4; /* Typical card aspect ratio */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+.card-image {
+            width: 100%;
+            height: 100%;
+            /* --- CHANGE THIS PROPERTY --- */
+            object-fit: contain; /* <-- Scales the image down to fit entirely within the container */
+            /* --------------------------- */
+            display: block;
+        }
+
+        /* Add placeholder card backgrounds (mimicking the image) */
+       /*.card:nth-child(1) { background-image: url('https://via.placeholder.com/180x252/2E8B57/FFFFFF?text=Merry+Christmas+Deer'); }
+        .card:nth-child(2) { background-image: url('https://via.placeholder.com/180x252/B22222/FFFFFF?text=Merry+Christmas+Dots'); }
+        .card:nth-child(3) { background-image: url('https://via.placeholder.com/180x252/A0522D/FFFFFF?text=Happy+Holidays+Reindeer'); }
+        .card:nth-child(4) { background-image: url('https://via.placeholder.com/180x252/006400/FFFFFF?text=Merry+Christmas+Leaves'); }
+        .card:nth-child(5) { background-image: url('https://via.placeholder.com/180x252/CD5C5C/FFFFFF?text=Jolly+Santa'); }
+        .card:nth-child(6) { background-image: url('https://via.placeholder.com/180x252/8B0000/FFFFFF?text=Merry+Christmas+Snowman'); }
+        .card:nth-child(7) { background-image: url('https://via.placeholder.com/180x252/008000/FFFFFF?text=Merry+Christmas+Tree'); }
+        .card:nth-child(8) { background-image: url('https://via.placeholder.com/180x252/2F4F4F/FFFFFF?text=Festive+Presents'); }
+        .card:nth-child(9) { background-image: url('https://via.placeholder.com/180x252/800000/FFFFFF?text=Christmas+Cabin+Snow'); }
+        .card:nth-child(10) { background-image: url('https://via.placeholder.com/180x252/4682B4/FFFFFF?text=Happy+Snowman+Figure'); }*/
+
+
+        /* --- Modal (Pop-up) Styling --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            text-align: left;
+            border: 5px solid #006400; /* Green border for festive look */
+            background-image: linear-gradient(to top, #ffffff, #f9f9f9);
+    max-height: 90vh; /* Set a maximum height relative to the viewport height */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
+  
+
+       }
+        
+
+            max-height: 90vh; /* Set a maximum height relative to the viewport height */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
+           
+
+        .modal-content h2 {
+            text-align: center;
+            color: #8B0000; /* Dark Red */
+            margin-top: 0;
+        }
+
+        .selected-card-preview {
+            width: 50%;
+            height: 200px;
+            background-size: contain;
+background-repeat: no-repeat;
+            background-position: center;
+            margin: 10px auto 20px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .send-button {
+            padding: 10px 20px;
+            background-color: #8B0000; /* Dark Red */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: #A52A2A; /* Brown/Darker Red */
+        }
+
+        .cancel-button {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #FF0000;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Select a Christmas Card</h1>
+    <p>Click your favorite to personalize!</p>
+
+    <div class="card-grid" id="cardGrid">
+        <div class="card" data-card-id="1"data-img="images/xmas1.jpg">
+            <img src="images/xmas1.jpg" class="card-image">
+
+        </div>
+        <div class="card" data-card-id="2"data-img="images/xmas2.jpg">
+            <img src="images/xmas2.jpg" class="card-image">
+</div>
+        <div class="card" data-card-id="3"data-img="images/xmas3.jpg">
+            <img src="images/xmas3.jpg" class="card-image"></div>
+        <div class="card" data-card-id="4"data-img="images/xmas4.jpg">
+            <img src="images/xmas4.jpg" class="card-image"></div>
+        <div class="card" data-card-id="5"data-img="images/xmas5.jpg">
+            <img src="images/xmas5.jpg" class="card-image"></div>
+        <div class="card" data-card-id="6"data-img="images/xmas6.jpg">
+            <img src="images/xmas6.jpg" class="card-image"></div>
+        <div class="card" data-card-id="7"data-img="images/xmas7.jpg">
+            <img src="images/xmas7.jpg" class="card-image"></div>
+        <div class="card" data-card-id="8"data-img="images/xmas8.jpg">
+            <img src="images/xmas8.jpg" class="card-image"></div>
+        <div class="card" data-card-id="9"data-img="images/xmas9.jpg">
+            <img src="images/xmas9.jpg" class="card-image"></div>
+        <div class="card" data-card-id="10"data-img="images/xmas10.jpg">
+            <img src="images/xmas10.jpg" class="card-image"></div>
+<div class="card" data-card-id="11"data-img="images/xmas11.jpg">
+            <img src="images/xmas11.jpg" class="card-image"></div>
+<div class="card" data-card-id="12"data-img="images/xmas12.jpg">
+            <img src="images/xmas12.jpg" class="card-image"></div>
+<div class="card" data-card-id="13"data-img="images/xmas13.jpg">
+            <img src="images/xmas13.jpg" class="card-image"></div>
+<div class="card" data-card-id="14"data-img="images/xmas14.jpg">
+            <img src="images/xmas14.jpg" class="card-image"></div>
+<div class="card" data-card-id="15"data-img="images/xmas15.jpg">
+            <img src="images/xmas15.jpg" class="card-image"></div>
+<div class="card" data-card-id="16"data-img="images/xmas16.jpg">
+            <img src="images/xmas16.jpg" class="card-image"></div>
+<div class="card" data-card-id="17"data-img="images/xmas17.jpg">
+            <img src="images/xmas17.jpg" class="card-image"></div>
+<div class="card" data-card-id="18"data-img="images/xmas18.jpg">
+            <img src="images/xmas18.jpg" class="card-image"></div>
+<div class="card" data-card-id="19"data-img="images/xmas19.jpg">
+            <img src="images/xmas19.jpg" class="card-image"></div>
+<div class="card" data-card-id="20"data-img="images/xmas20.jpg">
+            <img src="images/xmas20.jpg" class="card-image"></div>
+<div class="card" data-card-id="21"data-img="images/xmas21.jpg">
+            <img src="images/xmas21.jpg" class="card-image"></div>
+<div class="card" data-card-id="22"data-img="images/xmas22.jpg">
+            <img src="images/xmas22.jpg" class="card-image"></div>
+<div class="card" data-card-id="23"data-img="images/xmas23.jpg">
+            <img src="images/xmas23.jpg" class="card-image"></div>
+<div class="card" data-card-id="24"data-img="images/xmas24.jpg">
+            <img src="images/xmas24.jpg" class="card-image"></div>
+<div class="card" data-card-id="25"data-img="images/xmas25.jpg">
+            <img src="images/xmas25.jpg" class="card-image"></div>
+<div class="card" data-card-id="26"data-img="images/xmas26.jpg">
+            <img src="images/xmas26.jpg" class="card-image"></div>
+<div class="card" data-card-id="27"data-img="images/xmas27.jpg">
+            <img src="images/xmas27.jpg" class="card-image"></div>
+<div class="card" data-card-id="28"data-img="images/xmas28.jpg">
+            <img src="images/xmas28.jpg" class="card-image"></div>
+<div class="card" data-card-id="29"data-img="images/xmas29.jpg">
+            <img src="images/xmas29.jpg" class="card-image"></div>
+<div class="card" data-card-id="30"data-img="images/xmas30.jpg">
+            <img src="images/xmas30.jpg" class="card-image"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="modal-overlay" id="cardModal">
+<div class="modal-content">
+        
+            <h2>Personalize Your Card!</h2>
+            
+            <img id="previewImage" class="selected-card-preview" src="" alt="Selected Card Preview">
+                </div>
+
+            <form action="https://formspree.io/f/xnnebpog" method="POST">
+<input type="hidden" id="selectedCardImage" name="Selected Card Image URL" value="">
+    <div class="form-group">
+        <label for="recipientName">Recipient's Name:</label>
+        <input type="text" id="recipientName" name="Recipient's Name" placeholder="E.g., Grandma Carol" required>
+    </div>
+    <div class="form-group">
+        <label for="specialMessage">Your Special Message:</label>
+    <textarea 
+        id="specialMessage" 
+        rows="4" 
+        name="Special Message"  placeholder="Wishing you a wonderful Christmas filled with joy and laughter! Love, [Your Name]" 
+        required
+    ></textarea>
+    </div>
+    <div class="form-group">
+        <label for="recipientEmail">Recipient's Email:</label>
+        <input type="email" id="recipientEmail" name="Recipient Email" placeholder="recipient@example.com" required>
+    </div>
+    
+    <div class="form-actions">
+        <button type="submit" class="send-button">Send Your Festive Wishes!</button>
+    </div>
+</form>
+       
+
+    <script>
+
+        const cardModal = document.getElementById('cardModal');
+        const previewImage = document.getElementById('previewImage');
+        const cardForm = document.getElementById('cardForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Function to open the modal
+        function openModal(cardElement) {
+            const cardStyle = window.getComputedStyle(cardElement);
+            const cardBgImage = cardStyle.backgroundImage;
+const imagePath = cardElement.getAttribute('data-img');
+            
+            // Set the preview image in the modal to match the selected card
+            previewImage.src = imagePath;
+            
+            // Display the modal
+            cardModal.style.display = 'flex';
+
+// ADD THIS LINE: Set the value of the hidden input field
+    document.getElementById('selectedCardImage').value = imagePath;
+
+        }
+
+        // Function to close the modal and reset the form
+        function closeModal() {
+            cardModal.style.display = 'none';
+            cardForm.reset(); // Clear form fields
+            errorMessage.textContent = ''; // Clear error message
+        }
+
+        // Add click listener to all cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                openModal(this);
+            });
+        });
+
+        
+
+    </script>
+</body>
+</html>
