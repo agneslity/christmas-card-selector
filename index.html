@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select a Christmas Card</title>
+    <title>Christmas Card Download Gallery</title>
     <style>
         /* CSS for Styling */
         body {
@@ -19,7 +19,7 @@
             margin-bottom: 5px;
         }
 
-        p {
+        p.subtitle {
             color: #666;
             margin-bottom: 30px;
         }
@@ -27,9 +27,10 @@
         /* --- Card Grid Layout --- */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            /* Creates columns that are about 150px wide, adjusting to fit the screen */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -42,14 +43,9 @@
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
             aspect-ratio: 1 / 1.4; /* Typical card aspect ratio */
-            background-size: cover;
-            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
         }
 
         .card:hover {
@@ -57,26 +53,13 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-.card-image {
+        .card-image {
             width: 100%;
             height: 100%;
-            /* --- CHANGE THIS PROPERTY --- */
-            object-fit: contain; /* <-- Scales the image down to fit entirely within the container */
-            /* --------------------------- */
+            /* Ensures the whole image fits inside the card container */
+            object-fit: contain; 
             display: block;
         }
-
-        /* Add placeholder card backgrounds (mimicking the image) */
-       /*.card:nth-child(1) { background-image: url('https://via.placeholder.com/180x252/2E8B57/FFFFFF?text=Merry+Christmas+Deer'); }
-        .card:nth-child(2) { background-image: url('https://via.placeholder.com/180x252/B22222/FFFFFF?text=Merry+Christmas+Dots'); }
-        .card:nth-child(3) { background-image: url('https://via.placeholder.com/180x252/A0522D/FFFFFF?text=Happy+Holidays+Reindeer'); }
-        .card:nth-child(4) { background-image: url('https://via.placeholder.com/180x252/006400/FFFFFF?text=Merry+Christmas+Leaves'); }
-        .card:nth-child(5) { background-image: url('https://via.placeholder.com/180x252/CD5C5C/FFFFFF?text=Jolly+Santa'); }
-        .card:nth-child(6) { background-image: url('https://via.placeholder.com/180x252/8B0000/FFFFFF?text=Merry+Christmas+Snowman'); }
-        .card:nth-child(7) { background-image: url('https://via.placeholder.com/180x252/008000/FFFFFF?text=Merry+Christmas+Tree'); }
-        .card:nth-child(8) { background-image: url('https://via.placeholder.com/180x252/2F4F4F/FFFFFF?text=Festive+Presents'); }
-        .card:nth-child(9) { background-image: url('https://via.placeholder.com/180x252/800000/FFFFFF?text=Christmas+Cabin+Snow'); }
-        .card:nth-child(10) { background-image: url('https://via.placeholder.com/180x252/4682B4/FFFFFF?text=Happy+Snowman+Figure'); }*/
 
 
         /* --- Modal (Pop-up) Styling --- */
@@ -86,7 +69,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.85); /* Darker overlay for focus */
             display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
@@ -96,270 +79,172 @@
         .modal-content {
             background-color: #fff;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
             width: 90%;
-            max-width: 500px;
+            max-width: 650px; /* Max size for the enlarged view */
             position: relative;
-            text-align: left;
-            border: 5px solid #006400; /* Green border for festive look */
-            background-image: linear-gradient(to top, #ffffff, #f9f9f9);
-    max-height: 90vh; /* Set a maximum height relative to the viewport height */
-            overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
-  
-
-       }
-        
-
-            max-height: 90vh; /* Set a maximum height relative to the viewport height */
-            overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
-           
-
-        .modal-content h2 {
             text-align: center;
-            color: #8B0000; /* Dark Red */
-            margin-top: 0;
         }
-
-        .selected-card-preview {
-            width: 50%;
-            height: 200px;
-            background-size: contain;
-background-repeat: no-repeat;
-            background-position: center;
-            margin: 10px auto 20px;
-            border-radius: 8px;
-            border: 2px solid #ccc;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
+        
+        #enlargedImage {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
+            max-width: 100%; /* Ensures the image fits within the modal */
+            max-height: 70vh; /* Limits height based on screen size */
+            height: auto;
+            margin: 0 auto 20px;
             border-radius: 5px;
-            box-sizing: border-box;
-            resize: vertical;
+            object-fit: contain;
         }
 
-        .form-actions {
+        .button-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
         }
 
-        .send-button {
-            padding: 10px 20px;
-            background-color: #8B0000; /* Dark Red */
-            color: white;
+        .download-button, .cancel-button {
+            padding: 10px 30px;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
             transition: background-color 0.2s;
+            text-decoration: none; /* For the anchor tag */
+            display: inline-block;
         }
 
-        .send-button:hover {
-            background-color: #A52A2A; /* Brown/Darker Red */
+        .download-button {
+            background-color: #006400; /* Dark Green */
+            color: white;
+        }
+
+        .download-button:hover {
+            background-color: #008000;
         }
 
         .cancel-button {
-            background: none;
-            border: none;
-            color: #666;
-            cursor: pointer;
-            text-decoration: underline;
+            background-color: #B22222; /* Brick Red */
+            color: white;
         }
-
-        .error-message {
-            color: #FF0000;
-            margin-top: 10px;
-            text-align: center;
-            font-weight: bold;
+        
+        .cancel-button:hover {
+            background-color: #CD5C5C;
         }
     </style>
 </head>
 <body>
 
     <h1>Select a Christmas Card</h1>
-    <p>Click your favorite to personalize!</p>
+    <p class="subtitle">Click any card to view the larger image and download it.</p>
 
     <div class="card-grid" id="cardGrid">
-        <div class="card" data-card-id="1"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas1.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas1.jpg" class="card-image">
+        <script>
+            const cardGrid = document.getElementById('cardGrid');
+            const cardFileNames = [
+"images/xmas1.jpg",
+    "images/xmas2.jpg",
+    "images/xmas3.jpg",
+"images/xmas4.jpg",
+"images/xmas5.jpg",
+"images/xmas6.jpg",
+"images/xmas7.jpg",
+"images/xmas8.jpg",
+"images/xmas9.jpg",
+"images/xmas10.jpg",
+"images/xmas11.jpg",
+"images/xmas12.jpg",
+"images/xmas13.jpg",
+"images/xmas14.jpg",
+"images/xmas15.jpg",
+"images/xmas16.jpg",
+"images/xmas17.jpg",
+"images/xmas18.jpg",
+"images/xmas19.jpg",
+"images/xmas20.jpg",
+"images/xmas21.jpg",
+"images/xmas22.jpg",
+"images/xmas23.jpg",
+"images/xmas24.jpg",
+"images/xmas25.jpg",
+"images/xmas26.jpg",
+"images/xmas27.jpg",
+"images/xmas28.jpg",
+"images/xmas29.jpg",
+"images/xmas30.jpg",
 
-        </div>
-        <div class="card" data-card-id="2"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas2.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas2.jpg" class="card-image">
-</div>
-        <div class="card" data-card-id="3"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas3.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas3.jpg" class="card-image"></div>
-        <div class="card" data-card-id="4"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas4.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas4.jpg" class="card-image"></div>
-        <div class="card" data-card-id="5"data-img="https://agneslity.gi5thub.io/christmas-card-selector/images/xmas5.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas5.jpg" class="card-image"></div>
-        <div class="card" data-card-id="6"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas6.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas6.jpg" class="card-image"></div>
-        <div class="card" data-card-id="7"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas7.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas7.jpg" class="card-image"></div>
-        <div class="card" data-card-id="8"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas8.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas8.jpg" class="card-image"></div>
-        <div class="card" data-card-id="9"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas9.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas9.jpg" class="card-image"></div>
-        <div class="card" data-card-id="10"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas10.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas10.jpg" class="card-image"></div>
-<div class="card" data-card-id="11"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas11.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas11.jpg" class="card-image"></div>
-<div class="card" data-card-id="12"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas12.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas12.jpg" class="card-image"></div>
-<div class="card" data-card-id="13"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas13.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas13.jpg" class="card-image"></div>
-<div class="card" data-card-id="14"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas14.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas14.jpg" class="card-image"></div>
-<div class="card" data-card-id="15"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas15.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas15.jpg" class="card-image"></div>
-<div class="card" data-card-id="16"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas16.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas16.jpg" class="card-image"></div>
-<div class="card" data-card-id="17"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas17.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas17.jpg" class="card-image"></div>
-<div class="card" data-card-id="18"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas18.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas18.jpg" class="card-image"></div>
-<div class="card" data-card-id="19"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas19.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas19.jpg" class="card-image"></div>
-<div class="card" data-card-id="20"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas20.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas20.jpg" class="card-image"></div>
-<div class="card" data-card-id="21"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas21.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas21.jpg" class="card-image"></div>
-<div class="card" data-card-id="22"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas22.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas22.jpg" class="card-image"></div>
-<div class="card" data-card-id="23"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas23.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas23.jpg" class="card-image"></div>
-<div class="card" data-card-id="24"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas24.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas24.jpg" class="card-image"></div>
-<div class="card" data-card-id="25"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas25.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas25.jpg" class="card-image"></div>
-<div class="card" data-card-id="26"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas26.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas26.jpg" class="card-image"></div>
-<div class="card" data-card-id="27"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas27.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas27.jpg" class="card-image"></div>
-<div class="card" data-card-id="28"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas28.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas28.jpg" class="card-image"></div>
-<div class="card" data-card-id="29"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas29.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas29.jpg" class="card-image"></div>
-<div class="card" data-card-id="30"data-img="https://agneslity.github.io/christmas-card-selector/images/xmas30.jpg">
-            <img src="https://agneslity.github.io/christmas-card-selector/images/xmas30.jpg" class="card-image"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </div>
-
-    <div class="modal-overlay" id="cardModal">
-<div class="modal-content">
-        
-            <h2>Personalize Your Card!</h2>
+];
             
-            <img id="previewImage" class="selected-card-preview" src="" alt="Selected Card Preview">
-                </div>
+            
+            // Loop to generate cards using the single file path
+            cardFileNames.forEach((fileName, index) => {
+                // Note: The 'src' for the small image and the 'data-original-src' for the download are the same path.
+                const imagePath = fileName; 
+                
+                const cardHtml = `
+                    <div class="card" data-original-src="${imagePath}" data-filename="Christmas_Card_${index + 1}.jpg">
+                        <img src="${imagePath}" alt="Christmas Card ${index + 1}" class="card-image">
+                    </div>
+                `;
+                cardGrid.innerHTML += cardHtml;
+            });
+        </script>
+    </div>
 
-            <form action="https://formspree.io/f/xnnebpog" method="POST">
-<input type="hidden" id="selectedCardImage" name="Selected Card Image URL" value="">
-    <div class="form-group">
-        <label for="recipientName">Recipient's Name:</label>
-        <input type="text" id="recipientName" name="Recipient's Name" placeholder="E.g., Grandma Carol" required>
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal-content">
+            <img id="enlargedImage" src="" alt="Enlarged Christmas Card">
+            
+            <div class="button-group">
+                <a id="downloadLink" class="download-button">Download Card</a>
+                
+                <button type="button" class="cancel-button" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="specialMessage">Your Special Message:</label>
-    <textarea 
-        id="specialMessage" 
-        rows="4" 
-        name="Special Message"  placeholder="Wishing you a wonderful Christmas filled with joy and laughter! Love, [Your Name]" 
-        required
-    ></textarea>
-    </div>
-    <div class="form-group">
-        <label for="recipientEmail">Recipient's Email:</label>
-        <input type="email" id="recipientEmail" name="Recipient Email" placeholder="recipient@example.com" required>
-    </div>
-    
-    <div class="form-actions">
-        <button type="submit" class="send-button">Send Your Festive Wishes!</button>
-    </div>
-</form>
-       
 
     <script>
-
-        const cardModal = document.getElementById('cardModal');
-        const previewImage = document.getElementById('previewImage');
-        const cardForm = document.getElementById('cardForm');
-        const errorMessage = document.getElementById('errorMessage');
+        const imageModal = document.getElementById('imageModal');
+        const enlargedImage = document.getElementById('enlargedImage');
+        const downloadLink = document.getElementById('downloadLink');
 
         // Function to open the modal
         function openModal(cardElement) {
-            const cardStyle = window.getComputedStyle(cardElement);
-            const cardBgImage = cardStyle.backgroundImage;
-const imagePath = cardElement.getAttribute('data-img');
+            // 1. Get the image path from the card's data attributes
+            const originalSrc = cardElement.getAttribute('data-original-src');
+            const fileName = cardElement.getAttribute('data-filename');
             
-            // Set the preview image in the modal to match the selected card
-            previewImage.src = imagePath;
+            // 2. Set the image source for the enlarged view
+            enlargedImage.src = originalSrc;
             
-            // Display the modal
-            cardModal.style.display = 'flex';
-
-// ADD THIS LINE: Set the value of the hidden input field
-    document.getElementById('selectedCardImage').value = imagePath;
-
+            // 3. Set the download link properties
+            downloadLink.href = originalSrc;
+            downloadLink.setAttribute('download', fileName);
+            
+            // 4. Display the modal
+            imageModal.style.display = 'flex';
         }
 
-        // Function to close the modal and reset the form
+        // Function to close the modal (and return to selection page)
         function closeModal() {
-            cardModal.style.display = 'none';
-            cardForm.reset(); // Clear form fields
-            errorMessage.textContent = ''; // Clear error message
+            imageModal.style.display = 'none';
         }
 
-        // Add click listener to all cards
+        // Add click listeners to all generated cards
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', function() {
                 openModal(this);
             });
         });
-
         
-
+        // Close modal when clicking outside the content box
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
